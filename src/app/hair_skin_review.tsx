@@ -40,11 +40,7 @@ export default function HairSkinReview() {
     }
 
     setHairIssue(result.value);
-    router.push("/PlaceHolderScreen");
-    console.log(
-      "assessment after hair assessment save:",
-      useAssessmentStore.getState().assessment,
-    );
+    router.push("/danger_signs/danger_sign_eating_less");
   };
 
   return (

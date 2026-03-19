@@ -17,6 +17,10 @@ interface AssessmentStore {
   setHairPhotoUri: (photoUri: string | null) => void;
   setHairIssue: (hairIssue: Assessment["hair"]["hairIssue"]) => void;
   setHairAssessment: (data: Assessment["hair"]) => void;
+  setDangerSign: <K extends keyof Assessment["dangerSigns"]>(
+    key: K,
+    value: Assessment["dangerSigns"][K],
+  ) => void;
   setDangerSigns: (data: Assessment["dangerSigns"]) => void;
 
   resetAssessment: () => void;
@@ -113,6 +117,17 @@ export const useAssessmentStore = create<AssessmentStore>((set) => ({
       assessment: {
         ...state.assessment,
         hair: data,
+      },
+    })),
+
+  setDangerSign: (key, value) =>
+    set((state) => ({
+      assessment: {
+        ...state.assessment,
+        dangerSigns: {
+          ...state.assessment.dangerSigns,
+          [key]: value,
+        },
       },
     })),
 
