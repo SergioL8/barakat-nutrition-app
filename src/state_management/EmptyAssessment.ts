@@ -4,7 +4,12 @@ export const emptyAssessment: Assessment = {
   parent: {
     name: "",
     phone: "",
-    address: "",
+    address: {
+      streetAddress: "",
+      city: "",
+      province: "",
+      country: "",
+    },
     whatsappOptIn: false,
   },
 

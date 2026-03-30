@@ -12,7 +12,7 @@ export default function DangerSignDiarrheaVomiting() {
   };
 
   const handleNext = () => {
-    router.push("/PlaceHolderScreen");
+    router.push("/diagnosis_results");
   };
 
   return (

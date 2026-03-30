@@ -1,10 +1,17 @@
 export type YesNo = "yes" | "no";
 export type YesNoUnsure = "yes" | "no" | "unsure";
 
+export interface ParentAddress {
+  streetAddress: string;
+  city: string;
+  province: string;
+  country: string;
+}
+
 export interface ParentInformation {
   name: string;
   phone: string;
-  address: string;
+  address: ParentAddress;
   whatsappOptIn: boolean;
 }
 

@@ -27,7 +27,10 @@ export default function ParentChildInformation() {
   );
   const [parentName, setParentName] = useState("");
   const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
+  const [streetAddress, setStreetAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [province, setProvince] = useState("");
+  const [country, setCountry] = useState("");
   const [whatsappOptIn, setWhatsappOptIn] = useState(true);
 
   const [childName, setChildName] = useState("");
@@ -47,7 +50,10 @@ export default function ParentChildInformation() {
     const result = validateAndBuildChildAssessment1({
       parentName,
       phone,
-      address,
+      streetAddress,
+      city,
+      province,
+      country,
       whatsappOptIn,
       childName,
       age,
@@ -73,7 +79,10 @@ export default function ParentChildInformation() {
         keyboardVerticalOffset={Platform.OS === "ios" ? 8 : 0}
       >
         <View style={styles.container}>
-          <AssessmentHeader title="Malnutrition Check-up" onBack={handleBack} />
+          <AssessmentHeader
+            title="Childhood Malnutrition Assessment"
+            onBack={handleBack}
+          />
 
           <View style={styles.tealDivider} />
 
@@ -87,9 +96,9 @@ export default function ParentChildInformation() {
               <Text style={styles.sectionTitle}>Parent Information</Text>
             </View>
             <View style={styles.sectionBody}>
-              <FormRow label="Name">
+              <FormRow label="Parent name">
                 <AppTextField
-                  placeholder="name"
+                  placeholder="parent name"
                   value={parentName}
                   onChangeText={setParentName}
                 />
@@ -104,15 +113,39 @@ export default function ParentChildInformation() {
                 />
               </FormRow>
 
-              <FormRow label="Address">
+              <FormRow label="Street address">
                 <AppTextField
-                  placeholder="Value"
-                  value={address}
-                  onChangeText={setAddress}
+                  placeholder="street name and number"
+                  value={streetAddress}
+                  onChangeText={setStreetAddress}
                 />
               </FormRow>
 
-              <FormRow label="WhatsApp opt-in">
+              <FormRow label="City">
+                <AppTextField
+                  placeholder="city"
+                  value={city}
+                  onChangeText={setCity}
+                />
+              </FormRow>
+
+              <FormRow label="Province">
+                <AppTextField
+                  placeholder="province"
+                  value={province}
+                  onChangeText={setProvince}
+                />
+              </FormRow>
+
+              <FormRow label="Country">
+                <AppTextField
+                  placeholder="country"
+                  value={country}
+                  onChangeText={setCountry}
+                />
+              </FormRow>
+
+              <FormRow label="WhatsApp Nutrition Education Opt-in">
                 <View style={styles.optionRow}>
                   <Pressable
                     style={styles.option}
@@ -166,9 +199,9 @@ export default function ParentChildInformation() {
                 />
               </FormRow>
 
-              <FormRow label="Age">
+              <FormRow label="Age in months">
                 <AppTextField
-                  placeholder="Value"
+                  placeholder="months"
                   value={age}
                   onChangeText={setAge}
                   keyboardType="number-pad"

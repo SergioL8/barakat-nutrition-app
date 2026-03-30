@@ -12,7 +12,7 @@ export default function MuacInstructions() {
 
   return (
     <InstructionComponentScreen
-      title="Hair & Skin Assessment"
+      title="Hair Assessment"
       imageSource={require("../../assets/hair_skin_measurement.png")}
       imageAspectRatio={425 / 509}
       onBack={handleBack}

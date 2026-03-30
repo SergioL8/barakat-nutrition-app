@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import StartAssessmentButton from "../components/StartAssessmentButton";
 import { colors } from "../theme/theme";
@@ -18,6 +18,14 @@ export default function HomeScreen() {
 
       <View style={styles.body}>
         <Text style={styles.welcome}>Welcome, Guest!</Text>
+
+        <View style={styles.logoWrap}>
+          <Image
+            source={require("../../assets/multicolor_logo.png")}
+            style={styles.logo}
+            resizeMode="contain"
+          />
+        </View>
 
         <View style={styles.buttonWrap}>
           <StartAssessmentButton
@@ -67,7 +75,16 @@ const styles = StyleSheet.create({
     color: colors.brand.black,
     fontSize: 68 / 2,
     fontWeight: "500",
-    marginBottom: 68 / 2,
+    marginBottom: 24,
+  },
+  logoWrap: {
+    width: "100%",
+    alignItems: "center",
+    marginBottom: 36,
+  },
+  logo: {
+    width: 320,
+    height: 180,
   },
   buttonWrap: {
     width: "100%",

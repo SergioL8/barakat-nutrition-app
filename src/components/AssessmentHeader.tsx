@@ -1,5 +1,5 @@
 import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { colors } from "../theme/theme";
 
 type AssessmentHeaderProps = {
@@ -13,14 +13,23 @@ export default function AssessmentHeader({
 }: AssessmentHeaderProps) {
   return (
     <View style={styles.header}>
-      <Pressable
-        style={styles.backButton}
-        accessibilityRole="button"
-        accessibilityLabel="Back"
-        onPress={onBack}
-      >
-        <Text style={styles.backIcon}>‹</Text>
-      </Pressable>
+      <View style={styles.leftCluster}>
+        <Pressable
+          style={styles.backButton}
+          accessibilityRole="button"
+          accessibilityLabel="Back"
+          onPress={onBack}
+        >
+          <Text style={styles.backIcon}>‹</Text>
+        </Pressable>
+
+        <Image
+          source={require("../../assets/icon_gold.png")}
+          style={styles.brandIcon}
+          resizeMode="contain"
+        />
+      </View>
+
       <Text style={styles.headerTitle}>{title}</Text>
       <View style={styles.headerSpacer} />
     </View>
@@ -35,6 +44,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+  leftCluster: {
+    width: 84,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
   backButton: {
     width: 42,
     height: 42,
@@ -46,6 +61,10 @@ const styles = StyleSheet.create({
     fontSize: 34,
     lineHeight: 34,
   },
+  brandIcon: {
+    width: 36,
+    height: 36,
+  },
   headerTitle: {
     flex: 1,
     textAlign: "center",
@@ -54,6 +73,6 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   headerSpacer: {
-    width: 42,
+    width: 84,
   },
 });

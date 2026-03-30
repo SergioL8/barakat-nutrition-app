@@ -69,7 +69,9 @@ export default function MuacReview() {
 
               <View style={styles.questionSection}>
                 <Text style={styles.questionText}>
-                  What is the MUAC measurement (cm)?
+                  {
+                    "Please check the child's MUAC and enter the measurement here."
+                  }
                 </Text>
                 <AppTextField
                   placeholder="cm"

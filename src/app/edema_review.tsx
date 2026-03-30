@@ -62,7 +62,9 @@ export default function EdemaReview() {
 
             <View style={styles.questionSection}>
               <Text style={styles.questionText}>
-                Did the dent remain after pressing?
+                {
+                  "Does the child's skin remain indented in both feet after pressing for 3 seconds?"
+                }
               </Text>
 
               <View style={styles.optionColumn}>

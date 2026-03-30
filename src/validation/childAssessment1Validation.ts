@@ -3,7 +3,10 @@ import { Assessment } from "../state_management/Assessment";
 type RawChildAssessment1Input = {
   parentName: string;
   phone: string;
-  address: string;
+  streetAddress: string;
+  city: string;
+  province: string;
+  country: string;
   whatsappOptIn: boolean;
   childName: string;
   age: string;
@@ -65,12 +68,18 @@ export function validateAndBuildChildAssessment1(
 
   const parentName = input.parentName.trim();
   const phone = input.phone.trim();
-  const address = input.address.trim();
+  const streetAddress = input.streetAddress.trim();
+  const city = input.city.trim();
+  const province = input.province.trim();
+  const country = input.country.trim();
   const childName = input.childName.trim();
 
   if (!parentName) errors.push("Parent name is required.");
   if (!phone) errors.push("Phone is required.");
-  if (!address) errors.push("Address is required.");
+  if (!streetAddress) errors.push("Street address is required.");
+  if (!city) errors.push("City is required.");
+  if (!province) errors.push("Province is required.");
+  if (!country) errors.push("Country is required.");
   if (!childName) errors.push("Child name is required.");
 
   const age = parsePositiveNumber(input.age, "Age", errors);
@@ -95,7 +104,12 @@ export function validateAndBuildChildAssessment1(
       parent: {
         name: parentName,
         phone,
-        address,
+        address: {
+          streetAddress,
+          city,
+          province,
+          country,
+        },
         whatsappOptIn: input.whatsappOptIn,
       },
       child: {
