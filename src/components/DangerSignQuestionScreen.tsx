@@ -39,11 +39,6 @@ export default function DangerSignQuestionScreen({
     );
   };
 
-  const handleSkip = () => {
-    setDangerSign(dangerKey, selectedValue);
-    onNext();
-  };
-
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -90,15 +85,6 @@ export default function DangerSignQuestionScreen({
                 </Text>
               </Pressable>
             </View>
-
-            <Pressable
-              style={styles.skipButton}
-              onPress={handleSkip}
-              accessibilityRole="button"
-              accessibilityLabel="Skip to next question"
-            >
-              <Text style={styles.skipButtonText}>›</Text>
-            </Pressable>
           </View>
         </View>
       </View>
@@ -166,20 +152,5 @@ const styles = StyleSheet.create({
   },
   answerButtonTextSelected: {
     color: colors.primary.navy,
-  },
-  skipButton: {
-    position: "absolute",
-    right: 28,
-    bottom: 20,
-    width: 40,
-    height: 40,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  skipButtonText: {
-    color: colors.primary.teal,
-    fontSize: 40,
-    lineHeight: 40,
-    fontWeight: "300",
   },
 });

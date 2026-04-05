@@ -61,6 +61,31 @@ function parsePositiveNumber(
   return parsed;
 }
 
+function parseOptionalPositiveNumber(
+  raw: string,
+  fieldLabel: string,
+  errors: string[],
+): number | null {
+  const value = raw.trim();
+
+  if (value.length === 0) {
+    return null;
+  }
+
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) {
+    errors.push(`${fieldLabel} must be a valid number.`);
+    return null;
+  }
+
+  if (parsed <= 0) {
+    errors.push(`${fieldLabel} must be greater than 0.`);
+    return null;
+  }
+
+  return parsed;
+}
+
 export function validateAndBuildChildAssessment1(
   input: RawChildAssessment1Input,
 ): ChildAssessment1ValidationResult {
@@ -76,15 +101,24 @@ export function validateAndBuildChildAssessment1(
 
   if (!parentName) errors.push("Parent name is required.");
   if (!phone) errors.push("Phone is required.");
-  if (!streetAddress) errors.push("Street address is required.");
-  if (!city) errors.push("City is required.");
-  if (!province) errors.push("Province is required.");
-  if (!country) errors.push("Country is required.");
   if (!childName) errors.push("Child name is required.");
 
+  const hasAnyAddressField =
+    streetAddress.length > 0 ||
+    city.length > 0 ||
+    province.length > 0 ||
+    country.length > 0;
+
+  if (hasAnyAddressField) {
+    if (!streetAddress) errors.push("Street address is required.");
+    if (!city) errors.push("City is required.");
+    if (!province) errors.push("Province is required.");
+    if (!country) errors.push("Country is required.");
+  }
+
   const age = parsePositiveNumber(input.age, "Age", errors);
-  const weight = parsePositiveNumber(input.weight, "Weight", errors);
-  const height = parsePositiveNumber(input.height, "Height", errors);
+  const weight = parseOptionalPositiveNumber(input.weight, "Weight", errors);
+  const height = parseOptionalPositiveNumber(input.height, "Height", errors);
 
   if (input.gender === null) {
     errors.push("Gender is required.");
