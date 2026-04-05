@@ -1,7 +1,7 @@
 # Project Overview
 
 - React Native / Expo app for a child malnutrition assessment workflow.
-- Main flow:
+- Assessment flow:
   1. Home
   2. Parent/child information
   3. MUAC instruction -> camera -> review
@@ -9,53 +9,56 @@
   5. Hair/skin instruction -> camera -> review
   6. 7 danger-sign yes/no screens
   7. Final diagnosis / referral screen
-- State is stored in Zustand until `Finish Assessment`, which resets the store and returns to `/home`.
+- State lives in Zustand until `Finish Assessment`, which resets the assessment and returns to `/home`.
 - Tech stack:
   - Expo Router
   - React Native
   - Zustand
   - `expo-camera`
   - `expo-video`
+  - `@expo/vector-icons`
 
 # Architecture / Structure
 
 - Routes: `src/app`
 - Reusable UI components: `src/components`
-- Zustand model/store:
+- Zustand assessment model/store:
   - `src/state_management/Assessment.ts`
   - `src/state_management/AssessmentFunctions.ts`
   - `src/state_management/EmptyAssessment.ts`
 - Validation helpers: `src/validation`
 - Diagnosis/business logic: `src/utils/getDiagnosis.ts`
-- WHO height-for-age reference data:
+- WHO HAZ reference data:
   - `src/data/lhfaBoys.ts`
   - `src/data/lhfaGirls.ts`
   - `src/data/lhfaTypes.ts`
 
-- Diagnosis flow architecture:
-  - `diagnosis_results.tsx` computes diagnosis from current assessment inputs using `getDiagnosisResult(...)`
-  - It then persists `assessment.diagnosis` via `setDiagnosis(...)`
-  - UI currently renders from the freshly computed `diagnosis` object, not from a second read of `assessment.diagnosis`
+- Diagnosis flow:
+  - `diagnosis_results.tsx` computes diagnosis from current assessment inputs via `getDiagnosisResult(...)`
+  - It then persists `assessment.diagnosis` using `setDiagnosis(...)`
+  - The screen renders from the just-computed `diagnosis` object, not from a second read of `assessment.diagnosis`
 
 # Key Decisions
 
-- Explicit route files under `src/app` are preferred over heavy config-driven routing.
-- Validation/parsing stays in UI-layer validation helpers instead of inside Zustand actions.
-- Reusable screen components are preferred over large config maps.
+- Explicit route files are preferred over large config abstractions.
+- Validation/parsing stays in UI-layer helpers instead of Zustand actions.
+- Popup validation (`Alert.alert`) is preferred over inline error styling.
+- Reusable screen-level components are preferred over config maps.
+
 - Parent address is structured:
   - `parent.address.streetAddress`
   - `parent.address.city`
   - `parent.address.province`
   - `parent.address.country`
-- Address validation is group-based:
-  - all blank is allowed
-  - if any field is filled, all become required
+- Address validation rule:
+  - all address fields blank is allowed
+  - if any address field is filled, all address fields become required
 
-- Current diagnosis model is split into:
+- Current diagnosis data model:
   - `healthStatus`: `"Healthy" | "MAM" | "SAM"`
   - `heightForAgeZScore`: `number | null`
   - `stuntingStatus`: `"not-stunted" | "moderately-stunted" | "severely-stunted" | "unknown"`
-- `assessment.diagnosis` is persisted in Zustand; this is the current computed diagnosis section.
+- This computed diagnosis is persisted in `assessment.diagnosis`.
 
 - Health status logic:
   - edema `yes` => `SAM`
@@ -64,29 +67,33 @@
   - else => `Healthy`
 
 - Stunting logic:
-  - HAZ is computed from WHO LMS tables (`L`, `M`, `S`) using local sex-specific data arrays for months `0..60`
-  - Whole-month age is required for intake validation
-  - If age/height/gender is missing, age is non-integer, or age is outside `0..60`, HAZ returns `null`
-  - Stunting thresholds:
+  - Uses WHO height-for-age LMS tables for boys/girls, months `0..60`
+  - Age must be a whole number for intake validation
+  - HAZ returns `null` if age/height/gender is missing, age is non-integer, or age is outside `0..60`
+  - Thresholds:
     - `HAZ >= -2` => `not-stunted`
     - `-3 <= HAZ < -2` => `moderately-stunted`
     - `HAZ < -3` => `severely-stunted`
 
 - Display-only diagnosis override:
-  - if `healthStatus === "Healthy"` and `stuntingStatus` is moderate or severe
-  - diagnosis box shows `Stunted` instead of `Healthy`
-  - diagnosis box background uses light blue (`colors.status.info`)
-  - persisted `healthStatus` remains `Healthy`
+  - If `healthStatus === "Healthy"` and `stuntingStatus` is moderate or severe:
+    - main diagnosis label becomes `Stunted`
+    - diagnosis box color becomes `colors.status.info`
+  - Stored `healthStatus` remains `Healthy`
 
-- Diagnosis UI decisions:
+- Final diagnosis UI behavior:
   - Colored diagnosis box shows:
     - child name
     - display label (`Healthy` / `MAM` / `SAM` / display-only `Stunted`)
-    - human-readable stunting line
-  - Lower `Recommended CHW Action` section:
-    - always shows one row for `healthStatus`
-    - conditionally appends a second row for moderate/severe stunting
-    - stunting action copy is placeholder for now
+    - stunting line (`Not stunted`, `Moderately stunted`, `Severely stunted`, or unknown text)
+  - `Recommended CHW Action` section:
+    - always shows one row for underlying `healthStatus`
+    - conditionally adds a second light-blue stunting row for moderate/severe stunting
+    - stunting action text is placeholder
+  - `Danger Signs` section:
+    - appears only if any danger-sign answer is `yes`
+    - shows only true signs, in questionnaire order
+    - rows use a red `alert-outline` triangle icon and plain statement text
 
 # Current State
 
@@ -100,12 +107,12 @@
   - `src/app/diagnosis_results.tsx`
 
 - Parent/child form:
-  - popup validation only (`Alert.alert`)
+  - popup validation only
   - `age` must be a whole number `>= 0`
   - `gender` is required
-  - `height` and `weight` remain optional
+  - `weight` and `height` remain optional
 
-- Current Zustand data model includes:
+- Current Zustand sections:
   - `parent`
   - `child`
   - `muac`
@@ -115,32 +122,38 @@
   - `diagnosis`
 
 - Diagnosis screen currently:
-  - computes diagnosis from MUAC + edema + age + height + gender
+  - computes from MUAC + edema + age + height + gender
   - persists `assessment.diagnosis`
-  - shows only one health-status CHW action row plus an optional second stunting row
-  - uses placeholder text for moderate/severe stunting recommendations
+  - shows a health-status CHW action row
+  - optionally shows a second stunting CHW action row
+  - optionally shows a `Danger Signs` section with only true signs
 
-- Old diagnosis helper was replaced:
-  - previous `src/utils/getMuacClassification.ts` is no longer the active logic
-  - active helper is `src/utils/getDiagnosis.ts`
+- Danger-sign summary text is currently statement-style, not question-style.
 
 # Known Issues / Open Problems
 
-- Hair/skin review and danger signs are still not part of diagnosis logic.
+- Hair/skin review and danger signs do not currently affect diagnosis computation itself; danger signs are presentation-only on the final screen.
 - Stunting-specific recommended action text is still placeholder copy.
 - `diagnosis_results.tsx` still contains debug `console.log(...)` calls.
-- `getStuntingStatusLabel()` contains a typo for the unknown state:
+- `getStuntingStatusLabel()` has a typo for the unknown state:
   - `"Unknonw stunted status"`
 - `recommendedChwActions` is still exported from `getDiagnosis.ts` but is no longer used by the diagnosis screen.
 - `src/app/PlaceHolderScreen.tsx` still exists.
-- No test files are currently present in `src`, even though several diagnosis/validation changes would benefit from tests.
-- The app still stores captured media locally as URIs in Zustand; end-of-flow upload/persistence is not implemented.
+- No test files are currently present in `src`.
+- Captured media is still stored locally as URIs in Zustand; end-of-flow upload/persistence is not implemented.
 
 # Next Steps
 
-- Replace placeholder stunting recommendation text with final copy.
+- Replace placeholder stunting recommendation copy with final text.
+- Decide whether danger signs should affect diagnosis/referral logic, not just the final-screen summary.
 - Remove diagnosis-screen debug logs.
 - Fix the unknown stunting label typo.
+- Add tests for:
+  - HAZ computation
+  - stunting thresholds
+  - `Healthy` -> `Stunted` display override
+  - whole-month age validation
+  - danger-sign summary rendering rules
 - Clean up unused exports / temporary routes if no longer needed.
 - Implement end-of-flow upload/persistence strategy (likely Supabase).
 
@@ -149,8 +162,8 @@
 - User preferences:
   - pragmatic minimal changes
   - reusable screen components over heavy abstraction/config maps
-  - popup validation (`Alert.alert`) instead of inline validation styling
+  - popup validation (`Alert.alert`) instead of inline field styling
   - explicit route files are acceptable
 - Prefer existing theme colors from `src/theme/theme.ts`.
-- Avoid unnecessary dependencies and redundant styling.
-- Keep project logs concise and optimized for fast AI handoff.
+- Avoid unnecessary dependencies and redundant styles.
+- Keep logs concise and optimized for fast AI handoff.

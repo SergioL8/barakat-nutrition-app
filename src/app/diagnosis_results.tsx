@@ -1,9 +1,11 @@
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useEffect } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AssessmentHeader from "../components/AssessmentHeader";
 import NextButton from "../components/NextButton";
+import type { DangerSigns } from "../state_management/Assessment";
 import { useAssessmentStore } from "../state_management/AssessmentFunctions";
 import { colors } from "../theme/theme";
 import {
@@ -12,6 +14,37 @@ import {
   getStuntingRecommendedAction,
   getStuntingStatusLabel,
 } from "../utils/getDiagnosis";
+
+const dangerSignMetadata: { key: keyof DangerSigns; text: string }[] = [
+  {
+    key: "eatingLess",
+    text: "The child has been eating less than usual or refusing to eat or drink.",
+  },
+  {
+    key: "unusuallySleepy",
+    text: "The child is very weak, unusually sleepy, or difficult to wake up.",
+  },
+  {
+    key: "dehydrated",
+    text: "The child looks dehydrated with sunken eyes or slow skin return after a pinch.",
+  },
+  {
+    key: "fever",
+    text: "The child has fever or feels unusually cold to touch.",
+  },
+  {
+    key: "breathingDifficulty",
+    text: "The child is breathing faster than normal or having trouble breathing.",
+  },
+  {
+    key: "skinInfection",
+    text: "The child has sores, swelling, or a visible skin infection.",
+  },
+  {
+    key: "diarrheaVomiting",
+    text: "The child has had diarrhea or vomiting in the last few days.",
+  },
+];
 
 export default function DiagnosisResults() {
   const assessment = useAssessmentStore((state) => state.assessment);
@@ -31,6 +64,9 @@ export default function DiagnosisResults() {
     diagnosis.stuntingStatus,
   );
   const stuntingStatusLabel = getStuntingStatusLabel(diagnosis.stuntingStatus);
+  const trueDangerSigns = dangerSignMetadata.filter(
+    ({ key }) => assessment.dangerSigns[key] === "yes",
+  );
 
   console.log("Diagnosis in diagnosis_results.tsx: ", diagnosis);
 
@@ -134,6 +170,28 @@ export default function DiagnosisResults() {
               </View>
             ) : null}
           </View>
+
+          {trueDangerSigns.length > 0 ? (
+            <>
+              <View style={styles.actionsSection}>
+                <Text style={styles.actionsTitle}>Danger Signs</Text>
+              </View>
+
+              <View style={styles.dangerSignsBody}>
+                {trueDangerSigns.map((dangerSign) => (
+                  <View key={dangerSign.key} style={styles.actionRow}>
+                    <MaterialCommunityIcons
+                      name="alert-outline"
+                      size={24}
+                      color={colors.status.danger}
+                      style={styles.dangerIcon}
+                    />
+                    <Text style={styles.actionText}>{dangerSign.text}</Text>
+                  </View>
+                ))}
+              </View>
+            </>
+          ) : null}
         </ScrollView>
 
         <View style={styles.footer}>
@@ -201,7 +259,7 @@ const styles = StyleSheet.create({
   actionsSection: {
     backgroundColor: "#EEF3FB",
     paddingHorizontal: 24,
-    paddingVertical: 20,
+    paddingVertical: 8,
     borderBottomWidth: 1,
     borderBottomColor: "#DBE2EC",
   },
@@ -217,6 +275,13 @@ const styles = StyleSheet.create({
     paddingBottom: 28,
     gap: 22,
   },
+  dangerSignsBody: {
+    backgroundColor: "#EEF3FB",
+    paddingHorizontal: 24,
+    paddingTop: 8,
+    paddingBottom: 0,
+    gap: 22,
+  },
   actionRow: {
     flexDirection: "row",
     alignItems: "flex-start",
@@ -226,6 +291,9 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
+    marginTop: 2,
+  },
+  dangerIcon: {
     marginTop: 2,
   },
   actionText: {
