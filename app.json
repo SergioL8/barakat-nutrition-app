@@ -19,7 +19,11 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.CAMERA"
+      ],
+      "package": "com.brda5377.barakat_nutrition_app"
     },
     "web": {
       "output": "static",
@@ -50,6 +54,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "5fcaecf2-bee0-4c26-be77-d5e4ccb6a875"
+      }
     }
   }
 }
