@@ -71,13 +71,15 @@ export function getStuntingRecommendedAction(
       return {
         label: "Moderately stunted",
         accentColor: "#6AC0CA",
-        actionText: "Placeholder action for moderately stunted children.",
+        actionText:
+          "Improve daily diet and feeding practices, monitor growth regularly, and refer for nutrition counseling.",
       };
     case "severely-stunted":
       return {
         label: "Severely stunted",
         accentColor: "#6AC0CA",
-        actionText: "Placeholder action for severely stunted children.",
+        actionText:
+          "Refer to clinic for comprehensive growth and nutrition management with close follow-up.",
       };
     case "not-stunted":
     case "unknown":

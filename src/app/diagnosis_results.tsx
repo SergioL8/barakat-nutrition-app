@@ -74,6 +74,25 @@ export default function DiagnosisResults() {
   const trueDangerSigns = dangerSignMetadata.filter(
     ({ key }) => assessment.dangerSigns[key] === "yes",
   );
+  const hasHairConcern = assessment.hair.hairIssue === "yes";
+  const classificationIconName =
+    diagnosis.healthStatus === "SAM"
+      ? "alert-circle"
+      : diagnosis.healthStatus === "MAM"
+        ? "alert"
+        : diagnosis.stuntingStatus === "moderately-stunted" ||
+            diagnosis.stuntingStatus === "severely-stunted"
+          ? "ruler"
+          : "check-circle";
+  const classificationIconColor =
+    diagnosis.healthStatus === "SAM"
+      ? colors.status.danger
+      : diagnosis.healthStatus === "MAM"
+        ? colors.status.warning
+        : diagnosis.stuntingStatus === "moderately-stunted" ||
+            diagnosis.stuntingStatus === "severely-stunted"
+          ? colors.status.info
+          : colors.status.success;
 
   console.log("Diagnosis in diagnosis_results.tsx: ", diagnosis);
 
@@ -134,6 +153,11 @@ export default function DiagnosisResults() {
             <Text style={styles.resultLabel}>Classification Result</Text>
 
             <View style={styles.resultCenter}>
+              <MaterialCommunityIcons
+                name={classificationIconName}
+                size={48}
+                color={classificationIconColor}
+              />
               <Text style={styles.childName}>{childName}</Text>
               <Text style={styles.classificationText}>
                 {diagnosis.displayLabel}
@@ -198,6 +222,23 @@ export default function DiagnosisResults() {
                 </Text>
               </View>
             ) : null}
+
+            {hasHairConcern ? (
+              <View style={styles.actionRow}>
+                <MaterialCommunityIcons
+                  name="information-outline"
+                  size={22}
+                  color={colors.status.info}
+                  style={styles.infoIcon}
+                />
+                <Text style={styles.actionText}>
+                  <Text style={styles.actionLabel}>Supportive clinical sign</Text>
+                  <Text>
+                    {" → Hair changes can support SAM suspicion and should be considered with MUAC, edema, and WHZ."}
+                  </Text>
+                </Text>
+              </View>
+            ) : null}
           </View>
 
           {trueDangerSigns.length > 0 ? (
@@ -207,6 +248,23 @@ export default function DiagnosisResults() {
               </View>
 
               <View style={styles.dangerSignsBody}>
+                <View style={styles.urgentReferralRow}>
+                  <MaterialCommunityIcons
+                    name="hospital-box"
+                    size={24}
+                    color={colors.status.danger}
+                    style={styles.dangerIcon}
+                  />
+                  <Text style={styles.actionText}>
+                    <Text style={styles.actionLabel}>Urgent referral</Text>
+                    <Text>
+                      {
+                        " → Refer to hospital or urgent medical care immediately. Do not delay."
+                      }
+                    </Text>
+                  </Text>
+                </View>
+
                 {trueDangerSigns.map((dangerSign) => (
                   <View key={dangerSign.key} style={styles.actionRow}>
                     <MaterialCommunityIcons
@@ -324,6 +382,15 @@ const styles = StyleSheet.create({
   },
   dangerIcon: {
     marginTop: 2,
+  },
+  infoIcon: {
+    marginTop: 2,
+  },
+  urgentReferralRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: 12,
+    marginBottom: 8,
   },
   actionText: {
     flex: 1,
