@@ -13,6 +13,8 @@ import {
   getRecommendedChwAction,
   getStuntingRecommendedAction,
   getStuntingStatusLabel,
+  getWastingRecommendedAction,
+  getWastingStatusLabel,
 } from "../utils/getDiagnosis";
 
 const dangerSignMetadata: { key: keyof DangerSigns; text: string }[] = [
@@ -57,13 +59,18 @@ export default function DiagnosisResults() {
     assessment.edema.dentRemain,
     assessment.child.age,
     assessment.child.height,
+    assessment.child.weight,
     assessment.child.gender,
   );
   const recommendedAction = getRecommendedChwAction(diagnosis.healthStatus);
   const stuntingRecommendedAction = getStuntingRecommendedAction(
     diagnosis.stuntingStatus,
   );
+  const wastingRecommendedAction = getWastingRecommendedAction(
+    diagnosis.wastingStatus,
+  );
   const stuntingStatusLabel = getStuntingStatusLabel(diagnosis.stuntingStatus);
+  const wastingStatusLabel = getWastingStatusLabel(diagnosis.wastingStatus);
   const trueDangerSigns = dangerSignMetadata.filter(
     ({ key }) => assessment.dangerSigns[key] === "yes",
   );
@@ -75,11 +82,15 @@ export default function DiagnosisResults() {
       healthStatus: diagnosis.healthStatus,
       heightForAgeZScore: diagnosis.heightForAgeZScore,
       stuntingStatus: diagnosis.stuntingStatus,
+      weightForHeightZScore: diagnosis.weightForHeightZScore,
+      wastingStatus: diagnosis.wastingStatus,
     });
   }, [
     diagnosis.healthStatus,
     diagnosis.heightForAgeZScore,
     diagnosis.stuntingStatus,
+    diagnosis.weightForHeightZScore,
+    diagnosis.wastingStatus,
     setDiagnosis,
   ]);
 
@@ -130,6 +141,7 @@ export default function DiagnosisResults() {
               <Text style={styles.resultDescription}>
                 {stuntingStatusLabel}
               </Text>
+              <Text style={styles.resultDescription}>{wastingStatusLabel}</Text>
             </View>
           </View>
 
@@ -166,6 +178,23 @@ export default function DiagnosisResults() {
                     {stuntingRecommendedAction.label}
                   </Text>
                   <Text>{` → ${stuntingRecommendedAction.actionText}`}</Text>
+                </Text>
+              </View>
+            ) : null}
+
+            {wastingRecommendedAction ? (
+              <View style={styles.actionRow}>
+                <View
+                  style={[
+                    styles.actionDot,
+                    { backgroundColor: wastingRecommendedAction.accentColor },
+                  ]}
+                />
+                <Text style={styles.actionText}>
+                  <Text style={styles.actionLabel}>
+                    {wastingRecommendedAction.label}
+                  </Text>
+                  <Text>{` → ${wastingRecommendedAction.actionText}`}</Text>
                 </Text>
               </View>
             ) : null}

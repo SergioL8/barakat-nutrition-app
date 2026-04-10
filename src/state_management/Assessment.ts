@@ -6,6 +6,11 @@ export type StuntingStatus =
   | "moderately-stunted"
   | "severely-stunted"
   | "unknown";
+export type WastingStatus =
+  | "not-wasted"
+  | "moderately-wasted"
+  | "severely-wasted"
+  | "unknown";
 
 export interface ParentAddress {
   streetAddress: string;
@@ -58,6 +63,8 @@ export interface DiagnosisAssessment {
   healthStatus: HealthStatus;
   heightForAgeZScore: number | null;
   stuntingStatus: StuntingStatus;
+  weightForHeightZScore: number | null;
+  wastingStatus: WastingStatus;
 }
 
 export interface Assessment {

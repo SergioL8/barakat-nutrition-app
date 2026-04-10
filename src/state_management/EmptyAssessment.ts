@@ -50,5 +50,7 @@ export const emptyAssessment: Assessment = {
     healthStatus: "Healthy",
     heightForAgeZScore: null,
     stuntingStatus: "unknown",
+    weightForHeightZScore: null,
+    wastingStatus: "unknown",
   },
 };
