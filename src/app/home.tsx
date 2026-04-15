@@ -4,17 +4,12 @@ import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import StartAssessmentButton from "../components/StartAssessmentButton";
 import { colors } from "../theme/theme";
+import AppHeader from "../components/AppHeader";
 
 export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.header}>
-        <Text style={styles.brandText}>Barakat Nutrition</Text>
-
-        <Pressable style={styles.menuButton} accessibilityRole="button">
-          <Text style={styles.menuIcon}>☰</Text>
-        </Pressable>
-      </View>
+      <AppHeader />
 
       <View style={styles.body}>
         <Text style={styles.welcome}>Welcome, Guest!</Text>
@@ -40,31 +35,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: colors.primary.teal,
-  },
-  header: {
-    height: 104,
-    backgroundColor: colors.brand.white,
-    paddingHorizontal: 22,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  brandText: {
-    color: colors.primary.navy,
-    fontSize: 40 / 2,
-    fontWeight: "700",
-  },
-  menuButton: {
-    width: 40,
-    height: 40,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  menuIcon: {
-    color: colors.text.primary,
-    fontSize: 30,
-    lineHeight: 30,
+    backgroundColor: colors.primary.teal
   },
   body: {
     flex: 1,

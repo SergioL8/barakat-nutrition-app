@@ -12,10 +12,10 @@ export default function RootLayout() {
   const insets = useSafeAreaInsets();
   const pathname = usePathname();
   const showBottomNav =
-    pathname === "/home" || pathname === "/PlaceHolderScreen";
+    pathname === "/home" || pathname === "/SaveAndContinue";
 
   const isHome = pathname === "/home";
-  const isSaveContinue = pathname === "/PlaceHolderScreen";
+  const isSaveContinue = pathname === "/SaveAndContinue";
 
   return (
     <SafeAreaView style={styles.safeArea} edges={["left", "right", "bottom"]}>
@@ -46,7 +46,7 @@ export default function RootLayout() {
             <MaterialCommunityIcons
               name="home-outline"
               size={24}
-              color={isHome ? colors.primary.navy : "#7A8791"}
+              color={isHome ? colors.primary.teal : "#7A8791"}
             />
             <Text style={[styles.tabLabel, isHome && styles.activeTabLabel]}>
               Home
@@ -56,12 +56,12 @@ export default function RootLayout() {
           <Pressable
             style={styles.tabButton}
             accessibilityRole="button"
-            onPress={() => router.replace("/PlaceHolderScreen")}
+            onPress={() => router.replace("/SaveAndContinue")}
           >
             <MaterialCommunityIcons
               name="content-save-outline"
               size={24}
-              color={isSaveContinue ? colors.primary.navy : "#7A8791"}
+              color={isSaveContinue ? colors.primary.teal : "#7A8791"}
             />
             <Text
               style={[styles.tabLabel, isSaveContinue && styles.activeTabLabel]}
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   activeTabLabel: {
-    color: colors.primary.navy,
+    color: colors.primary.teal,
     fontWeight: "700",
   },
 });
