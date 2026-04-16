@@ -20,6 +20,7 @@ export default function AppHeader() {
       <Pressable
         style={styles.menuButton}
         accessibilityRole="button"
+        onPress={() => console.log("clicked")}
       >
         <Text style={styles.menuIcon}>☰</Text>
       </Pressable>

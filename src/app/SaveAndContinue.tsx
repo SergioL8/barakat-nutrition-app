@@ -1,8 +1,8 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import AppHeader from "../components/AppHeader";
 import { colors } from "../theme/theme";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SaveAndContinue() {
   return (
@@ -31,7 +31,9 @@ export default function SaveAndContinue() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: colors.primary.teal
+    backgroundColor: colors.primary.teal,
+    width: "100%",
+    height: "100%"
   },
   body: {
     flex: 1,
@@ -40,7 +42,8 @@ const styles = StyleSheet.create({
   },
   recordContainer: {
     flex: 1,
-    backgroundColor: colors.brand.white
+    backgroundColor: colors.brand.white,
+    width: "100%",
   },
   header: {
     fontSize: 18,
@@ -51,13 +54,14 @@ const styles = StyleSheet.create({
     height: 30,
     backgroundColor: colors.others.grey,
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    paddingHorizontal: 12,
+    alignItems: "center"
   },
   titles: {
+    flex: 1,
     fontWeight: "600",
-    paddingRight: 50,
-    paddingLeft: 80
+    fontSize: 14,
+    textAlign: "center",
   },
   savedCases: {
     padding: 22,
